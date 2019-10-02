@@ -6,7 +6,7 @@ function App() {
   return (
     <div className="App">
       <h1 className="App-logo">Currency Converter</h1>
-      <CurrencyBox />
+      <CurrencyBox/>
     </div>
   );
 }
