@@ -5,19 +5,17 @@ function CurrencyBox({from='USD', to='EUR'}) {
     const [fromCurrency, setFromCurrency] = useState(from);
     const [toCurrency, setToCurrency] = useState(to);
     const [rate, setRate] = useState(1);
-    const [reversedRate, setReversedRate] = useState(1); 
     const [list, setList] = useState([]);
 
     useEffect(() => {
         getCurrencyList()
         .then( list => setList(list) )
         
-        getRate(from, to)
+        getRate(fromCurrency, toCurrency)
         .then( rate => {
             setRate(rate)
-            setReversedRate(rate.toFixed(6))
         })
-    }, [from, to])
+    }, [fromCurrency, toCurrency])
 
     const changeCurrency = ({ target : { value }}, whichCurrency) => {
         switch(whichCurrency){
@@ -43,7 +41,7 @@ function CurrencyBox({from='USD', to='EUR'}) {
             </select>
         </div>
         <div>
-            <p>1 {toCurrency}= {reversedRate} {fromCurrency}</p>
+            <p>1 {toCurrency}= {(1/rate).toFixed(6)} {fromCurrency}</p>
             <select value={ toCurrency } 
                     onChange={e =>changeCurrency( e, 'to')}>
                     {list.map(each =>
