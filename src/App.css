@@ -16,7 +16,7 @@
 .CurrencyBox {
   margin: 0 10px;
   width: 300px;
-  height: 200px;
+  height: 250px;
   color: #fff;
 }
 
@@ -27,6 +27,16 @@
 .CurrencyBox-input{
   background: #293a51;
   height: 180px;
+}
+
+.CurrencyBox-convert-container{
+  width: 30px;
+  margin-top: 150px;
+}
+
+.CurrencyBox-convert-icon{
+  width: 25px;
+  height: 25px;
 }
 
 .CurrencyBox-input-dropdown-container{

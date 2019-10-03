@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getCurrencyList, getRate } from './apis';
+import convertIcon from './images/convert_icon.png';
 
 const CurrencyType = {
     FROM: 'from',
@@ -61,6 +62,13 @@ const CurrencyBox = ({from='USD', to='EUR'}) => {
                 amount={amount}
                 changeCurrency={changeCurrency}
                 changeAmount={changeAmount}/>
+        <div className="CurrencyBox-convert-container">
+            <img 
+                className="CurrencyBox-convert-icon"
+                src={convertIcon} 
+                alt="covert icon"
+            />
+        </div>
         <OneBox type={CurrencyType.TO}
                 from={toCurrency} 
                 to={fromCurrency} 
