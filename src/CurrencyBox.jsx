@@ -43,7 +43,7 @@ const CurrencyBox = ({from='USD', to='EUR'}) => {
                     setAmount(value);
                     break;
                 case CurrencyType.TO:
-                    setAmount(value*(1/rate).toFixed(6));
+                    setAmount(value*(1/rate));
                     break;
                 default:
                     break;
@@ -65,7 +65,7 @@ const CurrencyBox = ({from='USD', to='EUR'}) => {
                 from={toCurrency} 
                 to={fromCurrency} 
                 fromFullName={toCurrency}
-                rate={(1/rate).toFixed(6)}
+                rate={(1/rate)}
                 list={list}
                 amount={amount*rate}
                 changeCurrency={changeCurrency}
