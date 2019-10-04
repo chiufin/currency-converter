@@ -19,6 +19,7 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
     useEffect(() => {
         getCurrencyList()
         .then( list => setList(list) )
+        .catch(err => {})
     }, [])
 
     useEffect(() => {
@@ -26,6 +27,7 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
         .then( rate => {
             setRate(rate)
         })
+        .catch(err => {})
     }, [fromCurrency, toCurrency,])
 
     useEffect(() => {
@@ -36,34 +38,25 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
         } 
     }, [rate, rateButtonPosition, amount, reversedAmount])
 
-    const changeCurrency = ({ target : { value }}, whichCurrency) => {
-        switch(whichCurrency){
-            case CurrencyType.FROM:
-                setFromCurrency(value);
-                setRateButtonPosition(true);
-                break;
-            case CurrencyType.TO:
-                setToCurrency(value);
-                setRateButtonPosition(false);
-                break;
-            default:
-                break;
+    const changeCurrency = ({ target : { value, name }}) => {
+        if(name === CurrencyType.FROM){
+            setFromCurrency(value);
+            setRateButtonPosition(true);
+        }
+        if(name === CurrencyType.TO){
+            setToCurrency(value);
+            setRateButtonPosition(false);
         }
     }
 
-    const changeAmount =  ({ target : { value }}, whichCurrency ) => {
+    const changeAmount =  ({ target : { value, name }} ) => {
         if(!isNaN(Number(value))){
-            switch(whichCurrency){
-                case CurrencyType.FROM:
-                    setAmount(value);
-                    setReversedAmount(value*rate);
-                    break;
-                case CurrencyType.TO:
-                    setReversedAmount(value);
-                    setAmount(value/rate);
-                    break;
-                default:
-                    break;
+            if(name === CurrencyType.FROM){
+                setAmount(value);
+            }
+            if(name === CurrencyType.TO){
+                setReversedAmount(value);
+                setAmount(value/rate);
             }
         }
     }
@@ -98,14 +91,15 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
   );
 }
 
-const OneBox = ({type, from, to, fromFullName, rate, list, amount, changeCurrency, changeAmount}) => 
+export const OneBox = ({type, from, to, fromFullName, rate, list = [], amount, changeCurrency, changeAmount}) => 
 <div className="CurrencyBox">
     <p className="CurrencyBox-label">1 {from} = {rate} {to}</p>
     <div className="CurrencyBox-input">
         <div className="CurrencyBox-input-dropdown-container">
             <select className="CurrencyBox-input-dropdown"
                     value={ fromFullName }
-                    onChange={e => changeCurrency( e, type)}>
+                    name={type}
+                    onChange={changeCurrency}>
                 {list.map(each =>
                     <option key={each}>{each}</option>
                 )}
@@ -113,9 +107,10 @@ const OneBox = ({type, from, to, fromFullName, rate, list, amount, changeCurrenc
         </div>
         <input 
             className="CurrencyBox-input-text"
-            type="text" 
+            type="text"
+            name={type}
             value={amount}
-            onChange={e => changeAmount( e, type)}>
+            onChange={changeAmount}>
         </input>
     </div>
 </div>
