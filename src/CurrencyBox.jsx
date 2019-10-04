@@ -38,23 +38,23 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
         } 
     }, [rate, rateButtonPosition, amount, reversedAmount])
 
-    const changeCurrency = ({ target : { value }}, whichCurrency) => {
-        if(whichCurrency === CurrencyType.FROM){
+    const changeCurrency = ({ target : { value, name }}) => {
+        if(name === CurrencyType.FROM){
             setFromCurrency(value);
             setRateButtonPosition(true);
         }
-        if(whichCurrency === CurrencyType.TO){
+        if(name === CurrencyType.TO){
             setToCurrency(value);
             setRateButtonPosition(false);
         }
     }
 
-    const changeAmount =  ({ target : { value }}, whichCurrency ) => {
+    const changeAmount =  ({ target : { value, name }} ) => {
         if(!isNaN(Number(value))){
-            if(whichCurrency === CurrencyType.FROM){
+            if(name === CurrencyType.FROM){
                 setAmount(value);
             }
-            if(whichCurrency === CurrencyType.TO){
+            if(name === CurrencyType.TO){
                 setReversedAmount(value);
                 setAmount(value/rate);
             }
@@ -98,7 +98,8 @@ export const OneBox = ({type, from, to, fromFullName, rate, list = [], amount, c
         <div className="CurrencyBox-input-dropdown-container">
             <select className="CurrencyBox-input-dropdown"
                     value={ fromFullName }
-                    onChange={e => changeCurrency( e, type)}>
+                    name={type}
+                    onChange={changeCurrency}>
                 {list.map(each =>
                     <option key={each}>{each}</option>
                 )}
@@ -106,9 +107,10 @@ export const OneBox = ({type, from, to, fromFullName, rate, list = [], amount, c
         </div>
         <input 
             className="CurrencyBox-input-text"
-            type="text" 
+            type="text"
+            name={type}
             value={amount}
-            onChange={e => changeAmount( e, type)}>
+            onChange={changeAmount}>
         </input>
     </div>
 </div>
