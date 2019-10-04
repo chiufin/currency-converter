@@ -7,30 +7,44 @@ const CurrencyType = {
     TO: 'to'
 }
 
-const CurrencyBox = ({from='USD', to='EUR'}) => {
+const CurrencyBox = ({from='USD', to='USD'}) => {
     const [fromCurrency, setFromCurrency] = useState(from);
     const [toCurrency, setToCurrency] = useState(to);
     const [rate, setRate] = useState(1);
     const [list, setList] = useState([]);
     const [amount, setAmount] = useState(1);
+    const [reversedAmount, setReversedAmount] = useState(1);
+    const [rateButtonPosition, setRateButtonPosition] = useState(true);
 
     useEffect(() => {
         getCurrencyList()
         .then( list => setList(list) )
-        
+    }, [])
+
+    useEffect(() => {
         getRate(fromCurrency, toCurrency)
         .then( rate => {
             setRate(rate)
         })
-    }, [fromCurrency, toCurrency])
+    }, [fromCurrency, toCurrency,])
+
+    useEffect(() => {
+        if(rateButtonPosition){
+            setReversedAmount(amount*rate)
+        }else{
+            setAmount(reversedAmount/rate)
+        } 
+    }, [rate, rateButtonPosition, amount, reversedAmount])
 
     const changeCurrency = ({ target : { value }}, whichCurrency) => {
         switch(whichCurrency){
             case CurrencyType.FROM:
                 setFromCurrency(value);
+                setRateButtonPosition(true);
                 break;
             case CurrencyType.TO:
                 setToCurrency(value);
+                setRateButtonPosition(false);
                 break;
             default:
                 break;
@@ -42,9 +56,11 @@ const CurrencyBox = ({from='USD', to='EUR'}) => {
             switch(whichCurrency){
                 case CurrencyType.FROM:
                     setAmount(value);
+                    setReversedAmount(value*rate);
                     break;
                 case CurrencyType.TO:
-                    setAmount(value*(1/rate));
+                    setReversedAmount(value);
+                    setAmount(value/rate);
                     break;
                 default:
                     break;
@@ -75,7 +91,7 @@ const CurrencyBox = ({from='USD', to='EUR'}) => {
                 fromFullName={toCurrency}
                 rate={(1/rate)}
                 list={list}
-                amount={amount*rate}
+                amount={reversedAmount}
                 changeCurrency={changeCurrency}
                 changeAmount={changeAmount}/>
     </div>
