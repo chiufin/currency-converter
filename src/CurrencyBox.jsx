@@ -19,6 +19,7 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
     useEffect(() => {
         getCurrencyList()
         .then( list => setList(list) )
+        .catch(err => {})
     }, [])
 
     useEffect(() => {
@@ -26,6 +27,7 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
         .then( rate => {
             setRate(rate)
         })
+        .catch(err => {})
     }, [fromCurrency, toCurrency,])
 
     useEffect(() => {
@@ -37,33 +39,24 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
     }, [rate, rateButtonPosition, amount, reversedAmount])
 
     const changeCurrency = ({ target : { value }}, whichCurrency) => {
-        switch(whichCurrency){
-            case CurrencyType.FROM:
-                setFromCurrency(value);
-                setRateButtonPosition(true);
-                break;
-            case CurrencyType.TO:
-                setToCurrency(value);
-                setRateButtonPosition(false);
-                break;
-            default:
-                break;
+        if(whichCurrency === CurrencyType.FROM){
+            setFromCurrency(value);
+            setRateButtonPosition(true);
+        }
+        if(whichCurrency === CurrencyType.TO){
+            setToCurrency(value);
+            setRateButtonPosition(false);
         }
     }
 
     const changeAmount =  ({ target : { value }}, whichCurrency ) => {
         if(!isNaN(Number(value))){
-            switch(whichCurrency){
-                case CurrencyType.FROM:
-                    setAmount(value);
-                    setReversedAmount(value*rate);
-                    break;
-                case CurrencyType.TO:
-                    setReversedAmount(value);
-                    setAmount(value/rate);
-                    break;
-                default:
-                    break;
+            if(whichCurrency === CurrencyType.FROM){
+                setAmount(value);
+            }
+            if(whichCurrency === CurrencyType.TO){
+                setReversedAmount(value);
+                setAmount(value/rate);
             }
         }
     }
@@ -98,7 +91,7 @@ const CurrencyBox = ({from='USD', to='USD'}) => {
   );
 }
 
-const OneBox = ({type, from, to, fromFullName, rate, list, amount, changeCurrency, changeAmount}) => 
+export const OneBox = ({type, from, to, fromFullName, rate, list = [], amount, changeCurrency, changeAmount}) => 
 <div className="CurrencyBox">
     <p className="CurrencyBox-label">1 {from} = {rate} {to}</p>
     <div className="CurrencyBox-input">
