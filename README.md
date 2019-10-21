@@ -3,14 +3,12 @@
 before start, make sure to create /`.env`, and put your key inside
 
 ```javascript
-REACT_APP_API_CURRENCY_KEY = your_key
+REACT_APP_API_CURRENCY_KEY = your_key;
 ```
 
 generate key from [this site](https://currencylayer.com/)
 
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
 
 ## Available Scripts
 
